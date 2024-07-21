@@ -1,5 +1,8 @@
 server:
   port: 8081
+  servlet:
+    encoding:
+      force-response: true #머스테치 한글깨짐으로 인한 설정
 
 spring:
   jpa:
