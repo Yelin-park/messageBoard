@@ -40,3 +40,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### YML File ###
+application.yml
+application-oauth.yml
