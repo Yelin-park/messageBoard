@@ -25,8 +25,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -107,8 +106,6 @@ public class PostsApiControllerTest {
 
         String url = "http://localhost:" + port + "/api/v1/posts/" + updateId;
 
-        HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
-
         //when
         mvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -122,6 +119,7 @@ public class PostsApiControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     public void posts_삭제된다() throws Exception {
         //given
         Posts savedPosts = postsRepository.save(Posts.builder()
@@ -137,7 +135,10 @@ public class PostsApiControllerTest {
         int beforeSize = postsRepository.findAll().size();
 
         //when
-        restTemplate.delete(url, id);
+        mvc.perform(delete(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().writeValueAsString(id)))
+            .andExpect(status().isOk());
 
         //then
         List<Posts> all = postsRepository.findAll();
