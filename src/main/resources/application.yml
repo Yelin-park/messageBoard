@@ -5,8 +5,6 @@ server:
       force-response: true #머스테치 한글깨짐으로 인한 설정
 
 spring:
-  session:
-    store-type: jdbc
   profiles:
     include: oauth
   jpa:
